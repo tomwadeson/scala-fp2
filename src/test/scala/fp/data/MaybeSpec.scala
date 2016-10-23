@@ -2,7 +2,9 @@ package fp.data
 
 import fp.BaseSpec
 import fp.data.Maybe.{Just, Nothing}
+import fp.typeclasses.MonoidLaws
 import org.scalacheck.Gen
+import org.scalatest.prop.Checkers._
 
 class MaybeSpec extends BaseSpec {
 
@@ -54,11 +56,23 @@ class MaybeSpec extends BaseSpec {
       AbsentMaybeInt.orElse(p) should be(p)
     }
   }
+
+  "Maybe" should "form a Monoid" in {
+    check(MonoidLaws[Maybe[Int]](MaybeIntGen))
+  }
 }
 
 object MaybeGenerators {
   val PresentMaybeIntGen = presentMaybeGen(Gen.posNum[Int])
 
+  val MaybeIntGen = maybeGen(Gen.posNum[Int])
+
   def presentMaybeGen[A](implicit inner: Gen[A]): Gen[Maybe[A]] =
     inner.flatMap(Just(_))
+
+  def maybeGen[A](implicit inner: Gen[A]): Gen[Maybe[A]] =
+    Gen.frequency(
+      (9, presentMaybeGen),
+      (1, Nothing)
+    )
 }

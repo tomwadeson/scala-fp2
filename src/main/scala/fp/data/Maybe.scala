@@ -1,5 +1,7 @@
 package fp.data
 
+import fp.typeclasses.Monoid
+
 sealed trait Maybe[+A] {
   def isDefined: Boolean
 
@@ -41,5 +43,13 @@ object Maybe {
 
     override def unsafeGet: Nothing =
       throw new UnsupportedOperationException("`unsafeGet` is unsupported on `Nothing` values")
+  }
+
+  implicit def monoidInstance[A]: Monoid[Maybe[A]] = new Monoid[Maybe[A]] {
+    override def zero: Maybe[A] =
+      Nothing
+
+    override def op(a1: Maybe[A], a2: Maybe[A]): Maybe[A] =
+      a1 orElse a2
   }
 }
