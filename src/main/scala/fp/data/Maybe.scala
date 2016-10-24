@@ -1,6 +1,6 @@
 package fp.data
 
-import fp.typeclasses.Monoid
+import fp.typeclasses.{Functor, Monoid}
 
 sealed trait Maybe[+A] {
   def isDefined: Boolean
@@ -51,5 +51,12 @@ object Maybe {
 
     override def op(a1: Maybe[A], a2: Maybe[A]): Maybe[A] =
       a1 orElse a2
+  }
+
+  implicit val FunctorInstance = new Functor[Maybe] {
+    override def map[A, B](fa: Maybe[A])(f: (A) => B): Maybe[B] = fa match {
+      case Just(x) => Just(f(x))
+      case Nothing => Nothing
+    }
   }
 }

@@ -2,7 +2,7 @@ package fp.data
 
 import fp.BaseSpec
 import fp.data.Maybe.{Just, Nothing}
-import fp.typeclasses.MonoidLaws
+import fp.typeclasses.{FunctorLaws, MonoidLaws}
 import org.scalacheck.Gen
 import org.scalatest.prop.Checkers._
 
@@ -58,7 +58,13 @@ class MaybeSpec extends BaseSpec {
   }
 
   "Maybe" should "form a Monoid" in {
-    check(MonoidLaws[Maybe[Int]](MaybeIntGen))
+    check(MonoidLaws(MaybeIntGen))
+  }
+
+  it should "form a Functor" in {
+    val f: Int => Int = _ + 1
+    val g: Int => Int = _ * 2
+    check(FunctorLaws(MaybeIntGen)(f, g))
   }
 }
 
