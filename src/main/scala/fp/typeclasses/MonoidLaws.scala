@@ -1,8 +1,8 @@
 package fp.typeclasses
 
-import org.scalacheck.Prop.forAll
-import org.scalacheck.{Gen, Prop}
 import Monoid.ops._
+import org.scalacheck.{Gen, Prop}
+import org.scalacheck.Prop._
 
 object MonoidLaws {
 

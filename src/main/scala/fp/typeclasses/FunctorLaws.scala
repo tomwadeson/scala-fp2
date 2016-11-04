@@ -2,10 +2,9 @@ package fp.typeclasses
 
 import org.scalacheck.{Gen, Prop}
 import org.scalacheck.Prop._
+import Functor.ops._
 
 object FunctorLaws {
-
-  import Functor.ops._
 
   def apply[F[_], A, B, C](gen: Gen[F[A]])
                           (f: A => B, g: B => C)

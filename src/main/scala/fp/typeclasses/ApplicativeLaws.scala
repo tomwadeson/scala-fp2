@@ -1,8 +1,8 @@
 package fp.typeclasses
 
+import Applicative.ops._
 import org.scalacheck.{Gen, Prop}
 import org.scalacheck.Prop._
-import Applicative.ops._
 
 object ApplicativeLaws {
 
