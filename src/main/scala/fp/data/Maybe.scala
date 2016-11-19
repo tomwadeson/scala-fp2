@@ -1,6 +1,6 @@
 package fp.data
 
-import fp.typeclasses.{Applicative, Functor, Monoid}
+import fp.typeclasses.{Applicative, Functor, Monad, Monoid}
 
 sealed trait Maybe[+A] {
   def isDefined: Boolean
@@ -68,5 +68,16 @@ object Maybe {
       case (Just(f), Just(x)) => Just(f(x))
       case _ => Nothing
     }
+  }
+
+  implicit val MonadInstance = new Monad[Maybe] {
+    override def flatMap[A, B](ma: Maybe[A])(f: A => Maybe[B]): Maybe[B] =
+      ma match {
+        case Just(x) => f(x)
+        case _ => Nothing
+      }
+
+    override def pure[A](a: A): Maybe[A] =
+      Just(a)
   }
 }

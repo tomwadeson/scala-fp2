@@ -2,7 +2,7 @@ package fp.data
 
 import fp.BaseSpec
 import fp.data.Maybe.{Just, Nothing}
-import fp.typeclasses.{ApplicativeLaws, FunctorLaws, MonoidLaws}
+import fp.typeclasses.{ApplicativeLaws, FunctorLaws, MonadLaws, MonoidLaws}
 import org.scalacheck.Gen
 import org.scalatest.prop.Checkers._
 
@@ -71,6 +71,12 @@ class MaybeSpec extends BaseSpec {
     val f: Int => Int = _ + 1
     val g: Int => Int = _ * 2
     check(ApplicativeLaws[Maybe, Int, Int, Int](Gen.posNum[Int])(f, g))
+  }
+
+  it should "form a Monad" in {
+    val f: Int => Maybe[Int] = x => Just(x*2)
+    val g: Int => Maybe[Int] = x => Just(x+1)
+    check(MonadLaws(Gen.posNum[Int], f, g))
   }
 }
 
